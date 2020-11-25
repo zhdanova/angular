@@ -386,6 +386,7 @@ def ngc_compile_action(
         outputs,
         messages_out,
         tsconfig_file,
+        unused_inputs_list,
         node_opts,
         locale = None,
         i18n_args = [],
@@ -444,6 +445,7 @@ def ngc_compile_action(
         inputs = inputs,
         outputs = outputs,
         arguments = arguments,
+        unused_inputs_list = unused_inputs_list,
         executable = ctx.executable.compiler,
         execution_requirements = {
             "supports-workers": supports_workers,
@@ -520,6 +522,7 @@ def _compile_action(
         dts_bundles_out,
         messages_out,
         tsconfig_file,
+        unused_inputs_list,
         node_opts,
         compile_mode):
     # Give the Angular compiler all the user-listed assets
@@ -559,16 +562,16 @@ def _compile_action(
         ],
     )
 
-    return ngc_compile_action(ctx, ctx.label, action_inputs, outputs, messages_out, tsconfig_file, node_opts, None, [], dts_bundles_out, compile_mode)
+    return ngc_compile_action(ctx, ctx.label, action_inputs, outputs, messages_out, tsconfig_file, unused_inputs_list, node_opts, None, [], dts_bundles_out, compile_mode)
 
-def _prodmode_compile_action(ctx, inputs, outputs, tsconfig_file, node_opts):
+def _prodmode_compile_action(ctx, inputs, outputs, tsconfig_file, node_opts, unused_inputs_list = None):
     outs = _expected_outs(ctx)
-    return _compile_action(ctx, inputs, outputs + outs.closure_js, None, outs.i18n_messages, tsconfig_file, node_opts, "prodmode")
+    return _compile_action(ctx, inputs, outputs + outs.closure_js, None, outs.i18n_messages, tsconfig_file, unused_inputs_list, node_opts, "prodmode")
 
-def _devmode_compile_action(ctx, inputs, outputs, tsconfig_file, node_opts):
+def _devmode_compile_action(ctx, inputs, outputs, tsconfig_file, node_opts, unused_inputs_list = None):
     outs = _expected_outs(ctx)
     compile_action_outputs = outputs + outs.devmode_js + outs.declarations + outs.summaries + outs.metadata
-    _compile_action(ctx, inputs, compile_action_outputs, outs.dts_bundles, None, tsconfig_file, node_opts, "devmode")
+    _compile_action(ctx, inputs, compile_action_outputs, outs.dts_bundles, None, tsconfig_file, unused_inputs_list, node_opts, "devmode")
 
 def _ts_expected_outs(ctx, label, srcs_files = []):
     # rules_typescript expects a function with two or more arguments, but our
