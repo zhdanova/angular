@@ -30,7 +30,7 @@ Tutorials and guides include downloadable examples to accelerate your projects.
       <p class="card-footer">Try it now</p>
   </a>
   <a href="tutorial" class="docs-card" title="Create an app">
-      <section>Hello World</section>
+      <section>Hello World</section>d
       <p>Work through a full tutorial to create your first app.</p>
       <p class="card-footer">Tour of Heroes tutorial</p>
   </a>
